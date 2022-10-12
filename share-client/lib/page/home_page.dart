@@ -81,7 +81,7 @@ class HomeState extends StatefulWidget {
 
 class _HomeStateState extends State<HomeState> {
   Future<List<Content>>? list;
-  List<String> _loopList = [];
+  List<String> _loopList = ['公告服务暂停'];
   int pageNum = 0;
   int pageSize = 5;
 
@@ -117,6 +117,7 @@ class _HomeStateState extends State<HomeState> {
         params: {"pageNum": pageNum, "pageSize": pageSize});
     NoticeModel noticeModel = NoticeModel.fromJson(resData);
     List<NoticeContent> noticeList = noticeModel.content;
+    _loopList.length = 0;
     noticeList.forEach((element) {
       _loopList.add(element.content);
     });
@@ -333,9 +334,9 @@ class _HomeStateState extends State<HomeState> {
         //通常可以是一个 Text文本
         return Row(
           children: [
-            SizedBox(width: 15),
-            Icon(Icons.notifications_active),
-            Text(itemStr, style: TextStyle(color: Colors.blue, fontSize: 15)),
+            const SizedBox(width: 15),
+            const Icon(Icons.notifications_active),
+            Text(itemStr, style: const TextStyle(color: Colors.blue, fontSize: 15)),
           ],
         );
       },

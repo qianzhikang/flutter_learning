@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_client/entity/user_model.dart';
 import 'package:share_client/main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:share_client/page/profile_edit_page.dart';
 import 'package:share_client/theme/config.dart';
 import '../utils/share_preferences_util.dart';
 import 'login_page.dart';
@@ -26,7 +26,6 @@ class _ProfileOnePageState extends State<ProfileOnePage> {
 
   void _init() async {
     if (SpUtils.getInt("id") != -1) {
-      print("执行。。");
       int id = SpUtils.getInt("id")!;
       String token = SpUtils.getString("token")!;
       getUserData(id, token);
@@ -43,7 +42,9 @@ class _ProfileOnePageState extends State<ProfileOnePage> {
       roles = userModel.roles;
       avatar = userModel.avatar;
     });
-
+    SpUtils.setString("avatar", avatar);
+    SpUtils.setString("mobile", mobile);
+    SpUtils.setString("nickname", nickname);
   }
 
   void _dispose() async {
@@ -96,12 +97,21 @@ class _ProfileOnePageState extends State<ProfileOnePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                CircleAvatar(
-                  minRadius: 30.0,
-                  backgroundColor: Config.primarySwatchColor.shade300,
-                  child: const Icon(
-                    Icons.call,
-                    size: 30.0,
+                InkWell(
+                  onTap:()=>{
+                    Navigator.push(context, MaterialPageRoute(builder: (_)=>EditProfilePage())).then((value) => setState((){
+                      avatar = SpUtils.getString("avatar")!;
+                      nickname = SpUtils.getString("nickname")!;
+                      mobile = SpUtils.getString("mobile")!;
+                    }))
+                  },
+                  child: CircleAvatar(
+                    minRadius: 30.0,
+                    backgroundColor: Config.primarySwatchColor.shade300,
+                    child: const Icon(
+                      Icons.edit,
+                      size: 30.0,
+                    ),
                   ),
                 ),
                 CircleAvatar(

@@ -1,13 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:share_client/entity/user_model.dart';
 import 'package:share_client/main.dart';
 import 'package:share_client/page/home_page.dart';
 import 'package:share_client/entity/login_model.dart';
-import 'package:share_client/page/profile_page.dart';
-
 import '../utils/share_preferences_util.dart';
 
 
@@ -32,61 +26,22 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _init() async {
-    // usernameController.text = "15962540975";
-    // passwordController.text = "123123";
     String? username = SpUtils.getString('mobile');
     String? password = SpUtils.getString('password');
     print(username);
     print(password);
     if (username != "") {
       usernameController.text = username!;
-      // passwordController.text = password!;
     }
   }
 
   Future<void> _login(String username, String password,BuildContext context) async {
-    // 创建dio
-    // Dio dio = Dio();
-    // 设置 URI、请求头、请求体
-    // var response = await dio.post("http://localhost:8083/api/v1/users/login",
-    //     data: {"mobile": username, "password": password});
     var response = await request.post("/users/login",data: {
       "mobile": username, "password": password
     });
     LoginModel resData = LoginModel.fromJson(response);
     SpUtils.setInt('id', resData.id);
     SpUtils.setString('token', resData.token);
-
-    // 请求结果
-    // LoginModel resData = LoginModel.fromJson(json.decode(response));
-    // print(resData.toString());
-    // if(response.statusCode == HttpStatus.ok) {
-    //   if(response.data['data'] != null) {
-    //     print("登陆成功");
-    //     print(response.data);
-    //     LoginModel resData = LoginModel.fromJson(json.decode(response.toString()));
-    //     var userRes = await dio.get('http://localhost:8083/api/v1/users/${resData.data.id}',
-    //         options: Options(headers: {'X-Token':resData.data.token,})
-    //         );
-    //     print(userRes.data);
-    //     UserModel userData = UserModel.fromJson(json.decode(userRes.toString()));
-    //     // 本地持久化
-    //     SpUtils.setInt('id', userData.data.id);
-    //     SpUtils.setString('roles', userData.data.roles);
-    //     SpUtils.setString('mobile', userData.data.mobile);
-    //     SpUtils.setString('nickname', userData.data.nickname);
-    //     SpUtils.setString('avatar', userData.data.avatar);
-    //     SpUtils.setString('token', resData.data.token);
-    //     // 路由添砖
-    //     Navigator.push(
-    //         // context, MaterialPageRoute(builder: (context) => const ProfileOnePage()));
-    //         context, MaterialPageRoute(builder: (context) => const HomePage()));
-    //   }else{
-    //     print("用户名或密码不正确");
-    //   }
-    // } else {
-    //   print("Error: ${response.statusCode}");
-    // }
   }
 
   @override
