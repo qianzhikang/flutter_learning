@@ -1,7 +1,11 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share_client/entity/user_model.dart';
 import 'package:share_client/main.dart';
 import 'package:share_client/page/profile_edit_page.dart';
+import 'package:share_client/page/user_safe_page.dart';
 import 'package:share_client/theme/config.dart';
 import '../utils/share_preferences_util.dart';
 import 'login_page.dart';
@@ -33,8 +37,7 @@ class _ProfileOnePageState extends State<ProfileOnePage> {
   }
 
   Future<void> getUserData(int id, String token) async {
-    var userData =
-        await request.get("/users/$id", headers: {"X-Token": token});
+    var userData = await request.get("/users/$id", headers: {"X-Token": token});
     UserModel userModel = UserModel.fromJson(userData);
     setState(() {
       nickname = userModel.nickname;
@@ -66,7 +69,6 @@ class _ProfileOnePageState extends State<ProfileOnePage> {
           Column(
             children: <Widget>[
               _buildHeader(),
-              // _buildRow(),
               Expanded(child: _buildListTile()),
             ],
           ),
@@ -97,13 +99,17 @@ class _ProfileOnePageState extends State<ProfileOnePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                InkWell(
-                  onTap:()=>{
-                    Navigator.push(context, MaterialPageRoute(builder: (_)=>EditProfilePage())).then((value) => setState((){
-                      avatar = SpUtils.getString("avatar")!;
-                      nickname = SpUtils.getString("nickname")!;
-                      mobile = SpUtils.getString("mobile")!;
-                    }))
+                GestureDetector(
+                  onTap: () => {
+                    Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => EditProfilePage()))
+                        .then((value) => setState(() {
+                              avatar = SpUtils.getString("avatar")!;
+                              nickname = SpUtils.getString("nickname")!;
+                              mobile = SpUtils.getString("mobile")!;
+                            }))
                   },
                   child: CircleAvatar(
                     minRadius: 30.0,
@@ -122,12 +128,33 @@ class _ProfileOnePageState extends State<ProfileOnePage> {
                     minRadius: 50,
                   ),
                 ),
-                CircleAvatar(
-                  minRadius: 30.0,
-                  backgroundColor: Config.primarySwatchColor.shade300,
-                  child: const Icon(
-                    Icons.message,
-                    size: 30.0,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => UserSafePage()))
+                        .then((value) {
+                      if (value != null) {
+                        var flag = value as bool;
+                        if (flag) {
+                          Fluttertoast.showToast(
+                              msg: "密码修改成功！",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.TOP,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.green,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        }
+                      }
+                    });
+                  },
+                  child: CircleAvatar(
+                    minRadius: 30.0,
+                    backgroundColor: Config.primarySwatchColor.shade300,
+                    child: const Icon(
+                      Icons.lock,
+                      size: 30.0,
+                    ),
                   ),
                 ),
               ],

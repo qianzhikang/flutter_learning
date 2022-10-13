@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
         leading: Container(
           margin: EdgeInsets.only(left: 26.0),
           width: 50,
-          child: InkWell(
+          child: GestureDetector(
             onTap: ()=>{
               Navigator.push(context, MaterialPageRoute(builder: (_)=> HomePage()))
             },

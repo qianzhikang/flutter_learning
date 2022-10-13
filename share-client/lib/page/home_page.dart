@@ -246,7 +246,7 @@ class _HomeStateState extends State<HomeState> {
 
   /// 条目组件
   Widget contentCard(BuildContext context, Content content) {
-    return InkWell(
+    return GestureDetector(
       onTap: () => {
         Navigator.push(
             context,

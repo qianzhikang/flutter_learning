@@ -13,7 +13,7 @@ class _NewPageState extends State<NewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Home"),backgroundColor: Config.primaryColor,),
+      appBar: AppBar(title: Text("New Page"),backgroundColor: Config.primaryColor,),
       body: Text("New"),);
   }
 }
